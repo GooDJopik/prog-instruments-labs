@@ -1,9 +1,8 @@
 import sys
 import time
 import copy
-
 '''
-Example of test.txt file (double walls around the 8x8 -- or ?x? -- grid is required):
+Example of test.txt file (double walls around the 8x8 or ?x? grid is required):
 WWWWWWWWWWWW
 WWWWWWWWWWWW
 WW........WW
@@ -47,7 +46,6 @@ def solve(history):
     global history_best
     global bails
 
-    state = history[-1][0]
     cost = history[-1][2]
 
     # print_history(history)
@@ -171,16 +169,16 @@ def monster_health_remaining(history):
 
 # -------------------------------------------------------------------------------
 def check_sword_attacks(history, r, c):
-    # Only swing if two or three monsters hit or if one diagonal without space for dagger swing
+    # Only swing if two or three monsters hit or if one diagonal
+    # without space for dagger swing
     # and potential push (results in same effect for cheaper)
     state = history[-1][0]
     for direction in 'NESW':
         attacks = []
-
-        # Check north
         do_attack = False
         monster_count = 0
 
+        # Check north
         if direction == 'N':
             for c_offset in range(-1, 2):
                 if state[r - 1][c + c_offset] in monsters:
@@ -257,12 +255,13 @@ def check_sword_attacks(history, r, c):
                 push_dir_row = 0
 
         if len(attacks):
-            do_attacks(history, attacks, push_dir_row, push_dir_col, 'Sword', 80, r, c)
+            do_attacks(history, attacks, push_dir_row, push_dir_col,
+                       'Sword', 80, r, c)
 
 
 # -------------------------------------------------------------------------------
 def check_spear_attacks(history, r, c):
-    # There is no reason to use a spear attack unless it is hitting two monsters.
+    # There's no point in using a spear attack unless it's hitting 2 monsters.
     # If only one next to knight, dagger is cheaper.
     # If only one two away from knight, bow is cheaper.
     state = history[-1][0]
@@ -302,7 +301,8 @@ def check_spear_attacks(history, r, c):
                 push_dir_row = 0
 
         if len(attacks):
-            do_attacks(history, attacks, push_dir_row, push_dir_col, 'Spear', 70, r, c)
+            do_attacks(history, attacks, push_dir_row, push_dir_col,
+                       'Spear', 70, r, c)
 
 
 # -------------------------------------------------------------------------------
@@ -345,7 +345,8 @@ def check_bow_attacks(history, r, c):
                 push_dir_row = 0
 
         if len(attacks):
-            do_attacks(history, attacks, push_dir_row, push_dir_col, 'Bow', 60, r, c)
+            do_attacks(history, attacks, push_dir_row, push_dir_col,
+                       'Bow', 60, r, c)
 
 
 # -------------------------------------------------------------------------------
@@ -384,11 +385,13 @@ def check_dagger_attacks(history, r, c):
                 push_dir_row = 0
 
         if len(attacks):
-            do_attacks(history, attacks, push_dir_row, push_dir_col, 'Dagger', 50, r, c)
+            do_attacks(history, attacks, push_dir_row, push_dir_col,
+                       'Dagger', 50, r, c)
 
 
 # -------------------------------------------------------------------------------
-def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r, c):
+def do_attacks(history, attacks, push_dir_row,
+               push_dir_col, action, cost_add, r, c):
     """Executes the attack based on the action and updates the history."""
     global history_complete
 
@@ -423,7 +426,6 @@ def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r
     if [state, cost] not in history_complete:
         history_complete.append([state, cost])
         history.append([state, action, cost, [r, c]])
-
         solve(history)
 
 
@@ -460,8 +462,10 @@ monster_purple = 'P'
 monster_red = 'R'
 start = 'S'
 
-# Optimization: history_complete is used to ignore duplicate state and cost situations,
-# which is common in recursive bow and dagger attacks; only includes state[0] and cost[1]
+# Optimization:
+# history_complete is used to ignore duplicate state and cost situations,
+# which is common in recursive bow and dagger attacks;
+# only includes state[0] and cost[1]
 history_complete = []
 
 history_best = []
