@@ -17,6 +17,8 @@ WW........WW
 WWWWWWWWWWWW
 WWWWWWWWWWWW
 '''
+
+
 # -------------------------------------------------------------------------------
 def print_history(history):
     print('')
@@ -30,6 +32,8 @@ def print_history(history):
         print('')
         state[loc[0]][loc[1]] = '.'
     print('------------------------------------------')
+
+
 # -------------------------------------------------------------------------------
 def solve(history):
     '''Recursive function that solves the board
@@ -99,36 +103,44 @@ history: list of lists
         r = loc[0]
         c = loc[1]
         check_bow_attacks(history, r, c)
+
+
 # -------------------------------------------------------------------------------
 def get_valid_floors(history, walked, valid_floors):
     state = history[-1][0]
     loc = walked[-1]
     r = loc[0]
     c = loc[1]
+
     # Try north
     if state[r - 1][c] == floor and [r - 1, c] not in valid_floors:
         walked_new = copy.deepcopy(walked)
         walked_new.append([r - 1, c])
         valid_floors.append([r - 1, c])
         get_valid_floors(history, walked_new, valid_floors)
+
     # Try east
     if state[r][c + 1] == floor and [r, c + 1] not in valid_floors:
         walked_new = copy.deepcopy(walked)
         walked_new.append([r, c + 1])
         valid_floors.append([r, c + 1])
         get_valid_floors(history, walked_new, valid_floors)
+
     # Try south
     if state[r + 1][c] == floor and [r + 1, c] not in valid_floors:
         walked_new = copy.deepcopy(walked)
         walked_new.append([r + 1, c])
         valid_floors.append([r + 1, c])
         get_valid_floors(history, walked_new, valid_floors)
+
     # Try west
     if state[r][c - 1] == floor and [r, c - 1] not in valid_floors:
         walked_new = copy.deepcopy(walked)
         walked_new.append([r, c - 1])
         valid_floors.append([r, c - 1])
         get_valid_floors(history, walked_new, valid_floors)
+
+
 # ------------------------------------------------------------------------------
 def minimum_extra_cost(health_left):
     '''Extremely important optimization to reduce recursion massively'''
@@ -139,6 +151,8 @@ def minimum_extra_cost(health_left):
     if health_left == 1:
         extra_cost += 50
     return extra_cost
+
+
 # -------------------------------------------------------------------------------
 def monster_health_remaining(history):
     health_left = 0
@@ -152,6 +166,8 @@ def monster_health_remaining(history):
             if state[r][c] == monster_blue:
                 health_left += 1
     return health_left
+
+
 # -------------------------------------------------------------------------------
 def check_sword_attacks(history, r, c):
     # Only swing if two or three monsters hit or if one diagonal without space for dagger swing
@@ -159,6 +175,7 @@ def check_sword_attacks(history, r, c):
     state = history[-1][0]
     for direction in 'NESW':
         attacks = []
+
         # Check north
         do_attack = False
         monster_count = 0
@@ -179,6 +196,7 @@ def check_sword_attacks(history, r, c):
                 attacks = [[r - 1, c - 1], [r - 1, c], [r - 1, c + 1]]
                 push_dir_col = 0
                 push_dir_row = -1
+
         # Check east
         if direction == 'E':
             for r_offset in range(-1, 2):
@@ -197,6 +215,7 @@ def check_sword_attacks(history, r, c):
                 attacks = [[r - 1, c + 1], [r, c + 1], [r + 1, c + 1]]
                 push_dir_col = 1
                 push_dir_row = 0
+
         # Check south
         if direction == 'S':
             for c_offset in range(-1, 2):
@@ -215,6 +234,7 @@ def check_sword_attacks(history, r, c):
                 attacks = [[r + 1, c - 1], [r + 1, c], [r + 1, c + 1]]
                 push_dir_col = 0
                 push_dir_row = 1
+
         # Check west
         if direction == 'W':
             for r_offset in range(-1, 2):
@@ -233,8 +253,11 @@ def check_sword_attacks(history, r, c):
                 attacks = [[r - 1, c - 1], [r, c - 1], [r + 1, c - 1]]
                 push_dir_col = -1
                 push_dir_row = 0
+
         if len(attacks):
             do_attacks(history, attacks, push_dir_row, push_dir_col, 'Sword', 80, r, c)
+
+
 # -------------------------------------------------------------------------------
 def check_spear_attacks(history, r, c):
     # There is no reason to use a spear attack unless it is hitting two monsters.
@@ -243,6 +266,7 @@ def check_spear_attacks(history, r, c):
     state = history[-1][0]
     for direction in 'NESW':
         attacks = []
+
         # Check north
         if direction == 'N':
             if state[r - 2][c] in monsters and \
@@ -250,6 +274,7 @@ def check_spear_attacks(history, r, c):
                 attacks = [[r - 2, c], [r - 1, c]]
                 push_dir_col = 0
                 push_dir_row = -1
+
         # Check east
         if direction == 'E':
             if state[r][c + 2] in monsters and \
@@ -257,6 +282,7 @@ def check_spear_attacks(history, r, c):
                 attacks = [[r, c + 2], [r, c + 1]]
                 push_dir_col = 1
                 push_dir_row = 0
+
         # Check south
         if direction == 'S':
             if state[r + 2][c] in monsters and \
@@ -264,6 +290,7 @@ def check_spear_attacks(history, r, c):
                 attacks = [[r + 2, c], [r + 1, c]]
                 push_dir_col = 0
                 push_dir_row = 1
+
         # Check west
         if direction == 'W':
             if state[r][c - 2] in monsters and \
@@ -271,13 +298,17 @@ def check_spear_attacks(history, r, c):
                 attacks = [[r, c - 2], [r, c - 1]]
                 push_dir_col = -1
                 push_dir_row = 0
+
         if len(attacks):
             do_attacks(history, attacks, push_dir_row, push_dir_col, 'Spear', 70, r, c)
+
+
 # -------------------------------------------------------------------------------
 def check_bow_attacks(history, r, c):
     state = history[-1][0]
     for direction in 'NESW':
         attacks = []
+
         # Check north
         if direction == 'N':
             if state[r - 2][c] in monsters and \
@@ -285,6 +316,7 @@ def check_bow_attacks(history, r, c):
                 attacks = [[r - 2, c]]
                 push_dir_col = 0
                 push_dir_row = -1
+
         # Check east
         if direction == 'E':
             if state[r][c + 2] in monsters and \
@@ -292,6 +324,7 @@ def check_bow_attacks(history, r, c):
                 attacks = [[r, c + 2]]
                 push_dir_col = 1
                 push_dir_row = 0
+
         # Check south
         if direction == 'S':
             if state[r + 2][c] in monsters and \
@@ -299,6 +332,7 @@ def check_bow_attacks(history, r, c):
                 attacks = [[r + 2, c]]
                 push_dir_col = 0
                 push_dir_row = 1
+
         # Check west
         if direction == 'W':
             if state[r][c - 2] in monsters and \
@@ -306,39 +340,49 @@ def check_bow_attacks(history, r, c):
                 attacks = [[r, c - 2]]
                 push_dir_col = -1
                 push_dir_row = 0
+
         if len(attacks):
             do_attacks(history, attacks, push_dir_row, push_dir_col, 'Bow', 60, r, c)
+
+
 # -------------------------------------------------------------------------------
 def check_dagger_attacks(history, r, c):
     state = history[-1][0]
     for direction in 'NESW':
         attacks = []
+
         # Check north
         if direction == 'N':
             if state[r - 1][c] in monsters:
                 attacks = [[r - 1, c]]
                 push_dir_col = 0
                 push_dir_row = -1
+
         # Check east
         if direction == 'E':
             if state[r][c + 1] in monsters:
                 attacks = [[r, c + 1]]
                 push_dir_col = 1
                 push_dir_row = 0
+
         # Check south
         if direction == 'S':
             if state[r + 1][c] in monsters:
                 attacks = [[r + 1, c]]
                 push_dir_col = 0
                 push_dir_row = 1
+
         # Check west
         if direction == 'W':
             if state[r][c - 1] in monsters:
                 attacks = [[r, c - 1]]
                 push_dir_col = -1
                 push_dir_row = 0
+
         if len(attacks):
             do_attacks(history, attacks, push_dir_row, push_dir_col, 'Dagger', 50, r, c)
+
+
 # -------------------------------------------------------------------------------
 def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r, c):
     global history_complete
@@ -376,6 +420,8 @@ def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r
         history.append([state, action, cost, [r, c]])
 
         solve(history)
+
+
 # -------------------------------------------------------------------------------
 def do_text_direction(push_dir_row, push_dir_col):
     if push_dir_row == -1:
@@ -386,10 +432,14 @@ def do_text_direction(push_dir_row, push_dir_col):
         return 'West'
     if push_dir_col == 1:
         return 'East'
+
+
 # -------------------------------------------------------------------------------
 def hit_monster(mon):
     mon_ranks = [monster_red, monster_purple, monster_blue, floor]
     return mon_ranks[mon_ranks.index(mon) + 1]
+
+
 # -------------------------------------------------------------------------------
 # Main
 # -------------------------------------------------------------------------------
