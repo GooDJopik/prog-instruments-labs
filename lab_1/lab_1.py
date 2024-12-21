@@ -36,13 +36,13 @@ def print_history(history):
 
 # -------------------------------------------------------------------------------
 def solve(history):
-    '''Recursive function that solves the board
-history: list of lists
-    [0] state: list of lists that is the board matrix
-    [1] action: string
-    [2] cost: integer
-    [3] current location list: [r, c]
-    '''
+    """Recursive function that solves the board.
+    history: list of lists
+        [0] state: list of lists that is the board matrix
+        [1] action: string
+        [2] cost: integer
+        [3] current location list: [r, c]
+    """
     global cost_best
     global history_best
     global bails
@@ -143,7 +143,7 @@ def get_valid_floors(history, walked, valid_floors):
 
 # ------------------------------------------------------------------------------
 def minimum_extra_cost(health_left):
-    '''Extremely important optimization to reduce recursion massively'''
+    """Extremely important optimization to reduce recursion massively."""
     extra_cost = (health_left // 3) * 80
     health_left %= 3
     if health_left == 2:
@@ -155,6 +155,7 @@ def minimum_extra_cost(health_left):
 
 # -------------------------------------------------------------------------------
 def monster_health_remaining(history):
+    """Calculates the remaining health of monsters on the board."""
     health_left = 0
     state = history[-1][0]
     for r in range(len(state)):
@@ -179,6 +180,7 @@ def check_sword_attacks(history, r, c):
         # Check north
         do_attack = False
         monster_count = 0
+
         if direction == 'N':
             for c_offset in range(-1, 2):
                 if state[r - 1][c + c_offset] in monsters:
@@ -305,6 +307,7 @@ def check_spear_attacks(history, r, c):
 
 # -------------------------------------------------------------------------------
 def check_bow_attacks(history, r, c):
+    """Checks for valid bow attacks."""
     state = history[-1][0]
     for direction in 'NESW':
         attacks = []
@@ -347,6 +350,7 @@ def check_bow_attacks(history, r, c):
 
 # -------------------------------------------------------------------------------
 def check_dagger_attacks(history, r, c):
+    """Checks for valid dagger attacks."""
     state = history[-1][0]
     for direction in 'NESW':
         attacks = []
@@ -385,6 +389,7 @@ def check_dagger_attacks(history, r, c):
 
 # -------------------------------------------------------------------------------
 def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r, c):
+    """Executes the attack based on the action and updates the history."""
     global history_complete
 
     history = copy.deepcopy(history)
@@ -400,7 +405,7 @@ def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r
                 state[a[0]][a[1]] = mon
     action += ' ' + do_text_direction(push_dir_row, push_dir_col)
     cost += cost_add
-    '''
+    """
     do_append = True
     for item in history_complete:
         if item[0] == state and item[1] < cost:
@@ -412,7 +417,7 @@ def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r
         history.append([state, action, cost, [r, c]])
 
         solve(history)
-    '''
+    """
     # This is way faster than the above even though it is recording
     # more data than necessary
     if [state, cost] not in history_complete:
@@ -424,6 +429,7 @@ def do_attacks(history, attacks, push_dir_row, push_dir_col, action, cost_add, r
 
 # -------------------------------------------------------------------------------
 def do_text_direction(push_dir_row, push_dir_col):
+    """Returns the direction as a string based on row and column offsets."""
     if push_dir_row == -1:
         return 'North'
     if push_dir_row == 1:
@@ -436,6 +442,7 @@ def do_text_direction(push_dir_row, push_dir_col):
 
 # -------------------------------------------------------------------------------
 def hit_monster(mon):
+    """Returns the next rank of the monster after being hit."""
     mon_ranks = [monster_red, monster_purple, monster_blue, floor]
     return mon_ranks[mon_ranks.index(mon) + 1]
 
