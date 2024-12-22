@@ -53,10 +53,8 @@ class Symmetric:
             logger.info(f"Symmetric key successfully deserialized from: {file_name}")
         except FileNotFoundError:
             logger.error(f"File not found: {file_name}")
-            print("The file was not found")
         except Exception as e:
             logger.error(f"An error occurred while reading the file: {str(e)}")
-            print(f"An error occurred while reading the file: {str(e)}")
 
     def serialize_sym_key(self, path: str) -> None:
         """
@@ -70,13 +68,10 @@ class Symmetric:
             with open(path, 'wb') as key_file:
                 key_file.write(self.key)
             logger.info(f"Symmetric key successfully written to file: {path}")
-            print(f"The symmetric key has been successfully written to the file '{path}'.")
         except FileNotFoundError:
             logger.error(f"File not found: {path}")
-            print("The file was not found")
         except Exception as e:
             logger.error(f"An error occurred while writing the file: {str(e)}")
-            print(f"An error occurred while writing the file: {str(e)}")
 
     def encrypt(self, path_text: str, encrypted_path_text: str) -> bytes:
         """

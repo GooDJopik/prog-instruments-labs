@@ -49,10 +49,8 @@ class Asymmetric:
             logger.info(f"Public key successfully written to file: {public_path}")
         except FileNotFoundError:
             logger.error(f"File not found: {public_path}")
-            print(f"The file '{public_path}' was not found.")
         except Exception as e:
             logger.error(f"Error during public key serialization: {str(e)}")
-            print(f"Error: {str(e)}")
 
     def serialization_private(self, private_path: str) -> None:
         """
@@ -70,10 +68,8 @@ class Asymmetric:
             logger.info(f"Private key successfully written to file: {private_path}")
         except FileNotFoundError:
             logger.error(f"File not found: {private_path}")
-            print(f"The file '{private_path}' was not found.")
         except Exception as e:
             logger.error(f"Error during private key serialization: {str(e)}")
-            print(f"Error: {str(e)}")
 
     def public_key_deserialization(self, public_path: str) -> None:
         """
@@ -90,10 +86,8 @@ class Asymmetric:
             logger.info(f"Public key successfully deserialized from: {public_path}")
         except FileNotFoundError:
             logger.error(f"File not found: {public_path}")
-            print(f"The file '{public_path}' was not found.")
         except Exception as e:
             logger.error(f"Error during public key deserialization: {str(e)}")
-            print(f"Error: {str(e)}")
 
     def private_key_deserialization(self, private_path: str) -> None:
         """
@@ -110,10 +104,8 @@ class Asymmetric:
             logger.info(f"Private key successfully deserialized from: {private_path}")
         except FileNotFoundError:
             logger.error(f"File not found: {private_path}")
-            print(f"The file '{private_path}' was not found.")
         except Exception as e:
             logger.error(f"Error during private key deserialization: {str(e)}")
-            print(f"Error: {str(e)}")
 
     def encrypt(self, symmetric_key: bytes) -> bytes:
         """
